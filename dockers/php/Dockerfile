@@ -1,6 +1,5 @@
 FROM php:8.2-fpm
 
-WORKDIR /var/www
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -22,7 +21,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY ./calculator.ini /usr/local/etc/php/conf.d/calculator.ini
 # RUN pecl install memcached \
 #     && docker-php-ext-enable memcached
-    
+
 
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install mbstring
@@ -34,15 +33,21 @@ RUN docker-php-ext-install gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+
+
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 COPY --chown=www:www . /var/www
 
+WORKDIR /var/www
+
 USER www
 RUN composer global require laravel/installer
 RUN export PATH="$HOME/.composer/vendor/bin:$PATH"
 
-RUN composer install
 EXPOSE 9000
 CMD ["php-fpm"]

@@ -1,8 +1,8 @@
 PROJECT_NAME=laravel-calculator
 
-docker-up: 
+docker-up:
 	# @cp -n .env .env.local
-	docker-compose -p $(PROJECT_NAME) up --build 
+	docker-compose -p $(PROJECT_NAME) up
 docker-upd:
 	docker-compose -p $(PROJECT_NAME) up -d
 docker-app:
