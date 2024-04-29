@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # PHP Service
+  app:
+    build:
+      context: dockers/php
+      dockerfile: Dockerfile
+    environment:
+      - dockers/environment.yml
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: dockers/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  memcached:
+    image: memcached:alpine
+    container_name: memcached-laravel
+    restart: unless-stopped
+    ports:
+      - "11211:11211"
+    networks:
+      - app-network
+
+# Volumes
+volumes:
+  app-volume:
+
+# Networks
+networks:
+  app-network:
+    driver: bridge
