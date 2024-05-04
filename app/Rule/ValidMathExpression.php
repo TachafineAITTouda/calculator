@@ -103,7 +103,9 @@ class ValidMathExpression implements ValidationRule
 
     public function ighlightedExpression(string $expression, int $position): string
     {
-        return substr($expression, 0, $position) . '<' . substr($expression, $position, 1) . '>' . substr($expression, $position + 1);
+        $errorMessage = substr($expression, 0, $position) . '<' . substr($expression, $position, 1) . '>' . substr($expression, $position + 1);
+        $errorMessage = str_replace(['<', '>'], ['<span style="color:red; font-weight:bold;">', '</span>'], $errorMessage);
+        return $errorMessage;
     }
 
 }

@@ -40,7 +40,7 @@
                                 <x-button id="calculate-button">=</x-button>
                             </div>
                             @error('expression')
-                                <p class="text-red-500 text-sm dark:text-white">{{ $message }}</p>
+                                <p class="text-red-500 text-sm dark:text-white">{!! $message !!}</p>
                             @enderror
                         </form>
                         <div class="flex items-center justify-center gap-4">
