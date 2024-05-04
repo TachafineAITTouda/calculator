@@ -76,18 +76,28 @@ class ValidMathExpression implements ValidationRule
     {
         $expression = $this->expression;
         $errorPosition = null;
-        $operators = CalculatorService::OPERATORS;
+        $operators = array_keys(CalculatorService::OPERATORS);
 
-        $unwantedSequences = ['**', '*/', '/*', '//'];
-        if (in_array($expression[0], $operators) || in_array($expression[strlen($expression) - 1], $operators)) {
-            $errorPosition = in_array($expression[0], $operators) ? 0 : strlen($expression) - 1;
-        }
-
-        if ($errorPosition === null) {
-            foreach ($operators as $operator) {
-                $unwantedSequences = $operator . ')';
-                if (strpos($expression, $unwantedSequences) !== false) {
-                    $errorPosition = strpos($expression, $unwantedSequences);
+        for ($i = 0; $i < strlen($expression); $i++) {
+            $char = $expression[$i];
+            if (in_array($char, $operators)) {
+                if ($i === 0 && $char !== '-') {
+                    $errorPosition = $i;
+                    break;
+                } elseif ($i === strlen($expression) - 1) {
+                    $errorPosition = $i;
+                    break;
+                } elseif (in_array($expression[$i + 1], $operators)) {
+                    $errorPosition = $i + 1;
+                    break;
+                } elseif ($char !== '-' && $expression[$i + 1] === ')') {
+                    $errorPosition = $i + 1;
+                    break;
+                } elseif ($char !== '-' && $expression[$i - 1] === '(') {
+                    $errorPosition = $i - 1;
+                    break;
+                } elseif ($char !== '-' && in_array($expression[$i - 1], $operators)) {
+                    $errorPosition = $i - 1;
                     break;
                 }
             }

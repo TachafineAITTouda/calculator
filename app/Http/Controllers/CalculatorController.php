@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CalculatorRequest;
-use Illuminate\Http\Request;
+use App\Services\CalculatorService;
 
 class CalculatorController extends Controller
 {
@@ -12,11 +12,15 @@ class CalculatorController extends Controller
         return view('calculator');
     }
 
-    public function calculate(CalculatorRequest $request)
+    public function calculate(CalculatorRequest $request, CalculatorService $calculator)
     {
-        $result = 0;
+        $result = '';
         $expression = $request->input('expression');
-
+        try {
+            $result = $calculator->calculate($expression);
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+        }
         return view('calculator', [
             'expression' => $expression,
             'result' => $result
