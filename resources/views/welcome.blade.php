@@ -19,8 +19,8 @@
         <div class="min-h-screen flex items-center justify-center">
             <div class="max-w-2xl w-full p-6 bg-white rounded-lg shadow-[0px 14px 34px 0px rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:text-white/70">
                 <h1 class="text-xl font-semibold text-black dark:text-white">Welcome to Calculator</h1>
-                <p class="text-sm text-black dark:text-white/70">This is a simple calculator if addition, subtraction, multiplication and division is all you need.</p>
-                <a href="{{ route('calculator') }}" class="block mt-6 p-3 bg-[#FF2D20] text-white rounded-lg text-center">Go to Calculator</a>
+                <p class="text-sm mb-4 text-black dark:text-white/70">This is a simple calculator if addition, subtraction, multiplication and division is all you need.</p>
+                <a href="{{ route('calculator') }}" class="block mt-6 p-3  dark:text-blue rounded-lg">Go to Calculator</a>
             </div>
         </div>
     </body>
