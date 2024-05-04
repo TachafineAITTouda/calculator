@@ -11,3 +11,5 @@ docker-down:
 	docker-compose -p $(PROJECT_NAME) down
 docker-killall:
 	docker kill $(docker ps -q)
+test:
+	php artisan test
