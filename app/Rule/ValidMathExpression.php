@@ -26,7 +26,7 @@ class ValidMathExpression implements ValidationRule
 
     private function cleanExpression(): void
     {
-        $this->expression = str_replace(' ', '', $this->expression);
+        $this->expression = CalculatorService::cleanExpression($this->expression);
     }
 
     private function validateParentheses(): bool

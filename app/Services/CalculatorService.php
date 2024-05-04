@@ -5,20 +5,19 @@ namespace App\Services;
 class CalculatorService
 {
     public const OPERATORS = [
-        '+' => 1, '-' => 1, '*' => 2, '/' => 2, '^' => 3
+        '+' => 1, '-' => 1, '*' => 2, '/' => 2
     ];
 
     public function calculate(string $expression): float
     {
-        $expression = $this->cleanExpression($expression);
+        $expression = self::cleanExpression($expression);
         return $this->evaluate($expression);
     }
 
-    private function cleanExpression(string $expression): string
+    public static function cleanExpression(string $expression): string
     {
-        $expression = str_replace(' ', '', $expression);
-        $expression = str_replace('(-', '(0-', $expression);
-        $expression = str_replace(',-', ',0-', $expression);
+        $expression = str_replace([' ', 'x', '÷'], ['', '*', '/'], $expression);
+        $expression = str_replace(['(-', ',-'], ['(0-', ',0-'], $expression);
         return preg_replace('/(?<=[0-9)])(\()/i', '*(', $expression);
     }
 

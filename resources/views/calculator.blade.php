@@ -19,8 +19,8 @@
         <div class="min-h-screen flex items-center justify-center" >
             <div class="max-w-2xl w-full p-6 bg-black rounded-lg shadow-[0px 14px 34px 0px rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:text-white/50" >
                 <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div class="flex flex-col items-center justify-center gap-4">
-                        @foreach ([['1', '2', '3', '+', '-'], ['4', '5', '6', '*', '/'], ['7', '8', '9', 'C', '='], ['0', '.', '(', ')']] as $row)
+                    <div class="flex flex-col items-center justify-center gap-4" id="calculator-buttons">
+                        @foreach ([['1', '2', '3', '+', '-'], ['4', '5', '6', '*', '/'], ['7', '8', '9', 'C', '='], ['0', '(', ')']] as $row)
                             <div class="flex items-center justify-center gap-2">
                                 @foreach ($row as $button)
                                     <x-button>{{ $button }}</x-button>
@@ -50,5 +50,42 @@
                 </div>
             </div>
         </div>
+        <script>
+            const expressionInput = document.querySelector('input[name="expression"]');
+            const calculatorButtons = document.querySelectorAll('#calculator-buttons button');
+            const calculateButton = document.getElementById('calculate-button');
+
+            calculatorButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = button.textContent.trim();
+                    if (value === 'C') {
+                        expressionInput.value = '';
+                    } else if (value === '=') {
+                        calculateButton.click();
+                    } else {
+                        expressionInput.value += value;
+                    }
+                });
+            });
+
+            expressionInput.addEventListener('keypress', (e) => {
+                let input = e.key;
+                if (e.type === 'paste') {
+                    input = e.clipboardData.getData('text');
+                }
+                if (input === 'Enter') {
+                    calculateButton.click();
+                }
+                // replace all x with *
+                input = input.replace(/x/g, '*');
+                // replace all ÷ with /
+                input = input.replace(/÷/g, '/');
+
+                if (/[^0-9\+\-\*\/\(\)\.\s]/.test(input)) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+        </script>
     </body>
 </html>

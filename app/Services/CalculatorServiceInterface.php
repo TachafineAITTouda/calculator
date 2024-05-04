@@ -8,5 +8,5 @@ interface CalculatorServiceInterface
 {
     public function calculate(string $expression): float;
 
-    public function cleanExpression(string $expression): string;
+    public static function cleanExpression(string $expression): string;
 }
