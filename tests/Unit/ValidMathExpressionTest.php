@@ -20,6 +20,7 @@ class ValidMathExpressionTest extends TestCase
             ['3+', false],
             ['3+2)', false],
             ['(3+2', false],
+            ['3(2-5)()', false],
             ['(3+2))', false],
             ['3**5', false],
             ['3_+2', false],

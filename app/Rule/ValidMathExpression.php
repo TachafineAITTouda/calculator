@@ -33,12 +33,17 @@ class ValidMathExpression implements ValidationRule
     {
         $expression = $this->expression;
 
+        $emptyParentheses = strpos($expression,'()');
+        if ($emptyParentheses !== false) {
+            $highlightedExpression = $this->getHighlightedExpression($expression, $emptyParentheses);
+            throw new Exception('Unbalanced parentheses: ' . $highlightedExpression);
+        }
         $expressionPrentheses = preg_replace('/[^\(\)]/', '', $expression);
         $openParentheses = substr_count($expressionPrentheses, '(');
         $closeParentheses = substr_count($expressionPrentheses, ')');
         if ($openParentheses !== $closeParentheses) {
             $errorPosition = strpos($expression, $openParentheses > $closeParentheses ? '(' : ')');
-            $highlightedExpression = $this->ighlightedExpression($expression, $errorPosition);
+            $highlightedExpression = $this->getHighlightedExpression($expression, $errorPosition);
             throw new Exception('Unbalanced parentheses: ' . $highlightedExpression);
         }
 
@@ -53,7 +58,7 @@ class ValidMathExpression implements ValidationRule
         }
         foreach ($openParenthesesPositions as $key => $position) {
             if ($position > $closeParenthesesPositions[$key]) {
-                $highlightedExpression = $this->ighlightedExpression($expression, $position);
+                $highlightedExpression = $this->getHighlightedExpression($expression, $position);
                 throw new Exception('Unbalanced parentheses: ' . $highlightedExpression);
             }
         }
@@ -104,14 +109,14 @@ class ValidMathExpression implements ValidationRule
         }
 
         if ($errorPosition !== null) {
-            $highlightedExpression = $this->ighlightedExpression($expression, $errorPosition);
+            $highlightedExpression = $this->getHighlightedExpression($expression, $errorPosition);
             throw new Exception('Malformed expression: ' . $highlightedExpression);
         }
 
         return true;
     }
 
-    public function ighlightedExpression(string $expression, int $position): string
+    public function getHighlightedExpression(string $expression, int $position): string
     {
         $errorMessage = substr($expression, 0, $position) . '<' . substr($expression, $position, 1) . '>' . substr($expression, $position + 1);
         $errorMessage = str_replace(['<', '>'], ['<span style="color:red; font-weight:bold;">', '</span>'], $errorMessage);
